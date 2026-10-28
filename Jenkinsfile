@@ -16,12 +16,13 @@ pipeline {
             }
         }
 
+        
         stage('Load Image into Kubernetes') {
             steps {
-                bat 'kind get clusters'
-                bat 'kind load docker-image %IMAGE% --name docker-desktop'
+                bat '"%DOCKER%" images'
             }
         }
+
 
         stage('Deploy Application') {
             steps {
