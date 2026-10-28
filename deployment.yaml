@@ -1,21 +1,8 @@
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: cicd-web-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: cicd-web-app
-  template:
-    metadata:
-      labels:
-        app: cicd-web-app
-    spec:
-      containers:
-        - name: web
-          image: jenkins-k8s-lab:latest
-          imagePullPolicy: Never
-          ports:
-            - containerPort: 80
+stage('Verify Deployment') {
+    steps {
+        bat '"%KUBECTL%" rollout status deployment/cicd-web-app --timeout=120s'
+        bat '"%KUBECTL%" get deployments'
+        bat '"%KUBECTL%" get pods'
+        bat '"%KUBECTL%" get services'
+    }
+}
