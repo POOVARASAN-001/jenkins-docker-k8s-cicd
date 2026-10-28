@@ -1,0 +1,21 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cicd-web-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cicd-web-app
+  template:
+    metadata:
+      labels:
+        app: cicd-web-app
+    spec:
+      containers:
+        - name: web
+          image: jenkins-k8s-lab:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
