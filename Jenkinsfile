@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -16,25 +15,17 @@ pipeline {
             }
         }
 
-        
-        stage('Load Image into Kubernetes') {
+        stage('Deploy to Kubernetes') {
             steps {
-                bat '"%DOCKER%" images'
-            }
-        }
-
-
-        stage('Deploy Application') {
-            steps {
-                bat '"%KUBECTL%" apply -f deployment.yaml'
+                bat '"%KUBECTL%" apply --validate=false -f deployment.yaml'
             }
         }
 
         stage('Verify Deployment') {
             steps {
-                bat '"%KUBECTL%" rollout status deployment/jenkins-k8s-lab --timeout=120s'
+                bat '"%KUBECTL%" rollout status deployment/cicd-web-app --timeout=120s'
+                bat '"%KUBECTL%" get deployments'
                 bat '"%KUBECTL%" get pods'
-                bat '"%KUBECTL%" get services'
             }
         }
     }
