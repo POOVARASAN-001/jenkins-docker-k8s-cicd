@@ -3,7 +3,7 @@ pipeline {
     agent any
 
     environment {
-        KUBECTL = 'D:\\DockerApp\\resources\\bin\\kubectl.exe'
+        bat '"%DOCKER%" build -t jenkins-k8s-lab:latest .'
         KUBECONFIG = 'C:\\Users\\POOVARASAN\\.kube\\config'
         IMAGE = 'jenkins-k8s-lab:latest'
     }
