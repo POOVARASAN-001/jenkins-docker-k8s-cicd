@@ -3,7 +3,8 @@ pipeline {
     agent any
 
     environment {
-        bat '"%DOCKER%" build -t jenkins-k8s-lab:latest .'
+        DOCKER = 'D:\\DockerApp\\resources\\bin\\docker.exe'
+        KUBECTL = 'D:\\DockerApp\\resources\\bin\\kubectl.exe'
         KUBECONFIG = 'C:\\Users\\POOVARASAN\\.kube\\config'
         IMAGE = 'jenkins-k8s-lab:latest'
     }
@@ -11,12 +12,13 @@ pipeline {
     stages {
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t %IMAGE% .'
+                bat '"%DOCKER%" build -t %IMAGE% .'
             }
         }
 
         stage('Load Image into Kubernetes') {
             steps {
+                bat 'kind get clusters'
                 bat 'kind load docker-image %IMAGE% --name docker-desktop'
             }
         }
@@ -29,8 +31,9 @@ pipeline {
 
         stage('Verify Deployment') {
             steps {
-                bat '"%KUBECTL%" rollout status deployment/cicd-web-app --timeout=180s'
-                bat '"%KUBECTL%" get pods -l app=cicd-web-app'
+                bat '"%KUBECTL%" rollout status deployment/jenkins-k8s-lab --timeout=120s'
+                bat '"%KUBECTL%" get pods'
+                bat '"%KUBECTL%" get services'
             }
         }
     }
